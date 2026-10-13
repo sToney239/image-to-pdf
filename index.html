@@ -28,7 +28,7 @@
 <p id="status" role="status" aria-live="polite">Add an image, then use the button below to save it.</p>
 <div class="actions"><button id="save" class="save" data-i18n="save" disabled>Save PDF</button><button id="clear" data-i18n="clear" disabled>Clear</button></div>
 </section>
-<p class="foot"><span data-i18n="privacy">Images stay in your browser and are never uploaded. Transparent areas become white.</span><br><span data-i18n="footer">The PDF page follows the image proportions. Your browser controls the save location.</span></p>
+<p class="foot"><span data-i18n="privacy">Images stay in your browser and are never uploaded.</span><br><span data-i18n="transparency">Transparent PNG backgrounds become white.</span><br><span data-i18n="footer">The PDF page follows the image proportions.</span></p>
 </main>
 <script>
 /** @license
@@ -415,7 +415,7 @@ const translations = {
     language:'界面语言', auto:'自动', tool:'图片转换工具', zone:'点击选择 JPG 或 PNG 图片，也可拖入或粘贴图片',
     prompt:'拖入图片，或点击这里选择', formats:'支持 JPG / PNG', pasteBefore:'也可以在此页面按', pasteAfter:'粘贴截图或图片',
     preview:'当前待转换图片', replace:'点击或拖入新图片以替换 · 也可粘贴图片', save:'保存 PDF', clear:'清空',
-    privacy:'图片只在当前浏览器处理，不上传。透明背景会转换为白色。', footer:'PDF 页面按图片比例生成，保存位置由浏览器决定。',
+    privacy:'图片只在当前浏览器处理，不上传。', transparency:'PNG 的透明背景会转换为白色。', footer:'PDF 页面按图片比例生成。',
     empty:'尚未选择图片', initial:'准备好图片后，点击下方按钮保存。', reading:'正在读取图片…', generating:'正在生成 PDF…',
     ready:'PDF 已准备好，可以保存。', multi:'一次只处理一张，已使用第一张支持的图片。', downloaded:'已发起 PDF 下载，请查看浏览器下载列表或保存对话框。',
     unsupported:'请选择 JPG 或 PNG 图片。', noImage:'没有找到 JPG 或 PNG 图片。', kept:'当前图片已保留。',
@@ -429,7 +429,7 @@ const translations = {
     language:'表示言語', auto:'自動', tool:'画像変換ツール', zone:'クリックして JPG または PNG を選択、または画像をドロップ・貼り付け',
     prompt:'画像をドロップ、またはクリックして選択', formats:'JPG / PNG に対応', pasteBefore:'このページで', pasteAfter:'を押してスクリーンショットや画像を貼り付け',
     preview:'変換する画像のプレビュー', replace:'クリック・ドロップ・貼り付けで画像を置き換え', save:'PDF を保存', clear:'クリア',
-    privacy:'画像はブラウザー内で処理され、アップロードされません。透明部分は白になります。', footer:'PDF のページは画像の縦横比に合わせます。保存先はブラウザーで指定します。',
+    privacy:'画像はブラウザー内で処理され、アップロードされません。', transparency:'PNG の透明な背景は白に変換されます。', footer:'PDF のページは画像の縦横比に合わせます。',
     empty:'画像が選択されていません', initial:'画像を入れたら、下のボタンで保存してください。', reading:'画像を読み込み中…', generating:'PDF を作成中…',
     ready:'PDF の準備ができました。保存できます。', multi:'一度に処理できるのは1枚です。対応する最初の画像を使用しました。', downloaded:'PDF のダウンロードを開始しました。ダウンロード一覧または保存ダイアログをご確認ください。',
     unsupported:'JPG または PNG 画像を選択してください。', noImage:'JPG または PNG 画像が見つかりません。', kept:'現在の画像は保持されています。',
@@ -443,7 +443,7 @@ const translations = {
     language:'Interface language', auto:'Auto', tool:'Image converter', zone:'Choose a JPG or PNG image, or drop or paste an image',
     prompt:'Drop an image, or click to choose', formats:'Supports JPG / PNG', pasteBefore:'You can also press', pasteAfter:'on this page to paste a screenshot or image',
     preview:'Preview of the current image', replace:'Click, drop or paste a new image to replace this one', save:'Save PDF', clear:'Clear',
-    privacy:'Images stay in your browser and are never uploaded. Transparent areas become white.', footer:'The PDF page follows the image proportions. Your browser controls the save location.',
+    privacy:'Images stay in your browser and are never uploaded.', transparency:'Transparent PNG backgrounds become white.', footer:'The PDF page follows the image proportions.',
     empty:'No image selected', initial:'Add an image, then use the button below to save it.', reading:'Reading image…', generating:'Creating PDF…',
     ready:'Your PDF is ready to save.', multi:'Only one image is processed at a time. The first supported image was used.', downloaded:'PDF download started. Check your browser downloads or save dialog.',
     unsupported:'Please choose a JPG or PNG image.', noImage:'No JPG or PNG image was found.', kept:'Your current image has been kept.',
