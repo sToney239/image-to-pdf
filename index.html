@@ -480,8 +480,11 @@ if(/Mac|iPhone|iPad/.test(navigator.platform))document.getElementById('pasteKey'
 function reset(){generation++;current=null;infoState=null;save.disabled=true;clear.disabled=true;zone.classList.remove('loaded');preview.removeAttribute('src');if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}input.value='';renderInfo();message('initial')}
 function isSupported(file){return !!file&&(['image/jpeg','image/png'].includes(file.type)||(!file.type&&/\.(jpe?g|png)$/i.test(file.name)))}
 function pdfName(name){const stem=(name||t('pasted')).replace(/\.[^.]+$/,'').replace(/[<>:"/\\|?*\x00-\x1f]/g,'_').replace(/[. ]+$/,'')||t('fallback');return stem+'.pdf'}
-async function loadFile(file,multiple=false){
+function clipboardName(date){const pad=value=>String(value).padStart(2,'0');return 'clipboard-'+date.getFullYear()+pad(date.getMonth()+1)+pad(date.getDate())+'-'+pad(date.getHours())+pad(date.getMinutes())+pad(date.getSeconds())+'.pdf'}
+async function loadFile(file,multiple=false,{source='file',receivedAt}={}){
   if(!isSupported(file)){message('unsupported',{error:true,kept:!!current});return}
+  // Capture the name once, before decoding, so repeated saves stay consistent.
+  const downloadName=source==='clipboard'?clipboardName(receivedAt||new Date()):pdfName(file.name);
   const token=++generation;current=null;save.disabled=true;clear.disabled=false;zone.classList.remove('loaded');preview.removeAttribute('src');
   if(previewUrl){URL.revokeObjectURL(previewUrl);previewUrl=null}
   infoState={name:file.name};renderInfo();message('reading');
@@ -501,15 +504,15 @@ async function loadFile(file,multiple=false){
     const scale=Math.min(0.75,14400/Math.max(width,height)),pw=width*scale,ph=height*scale;
     const pdf=new window.jspdf.jsPDF({orientation:pw>ph?'landscape':'portrait',unit:'pt',format:[pw,ph],compress:true});
     pdf.addImage(canvas,'PNG',0,0,pw,ph,undefined,'FAST');
-    pdf.setProperties({title:pdfName(file.name).replace(/\.pdf$/,''),creator:'Image to PDF'});
+    pdf.setProperties({title:downloadName.replace(/\.pdf$/,''),creator:'Image to PDF'});
     const blob=pdf.output('blob');canvas.width=0;canvas.height=0;
     if(token!==generation)return;
-    current={blob,fileName:file.name};previewUrl=url;preview.src=url;zone.classList.add('loaded');save.disabled=false;
+    current={blob,downloadName};previewUrl=url;preview.src=url;zone.classList.add('loaded');save.disabled=false;
     infoState={name:file.name,width,height};renderInfo();message('ready',{multi:multiple});
   }catch(error){if(token===generation){const reason=['emptySize','tooLarge','noCanvas'].includes(error.message)?error.message:failureReason;message('failed',{error:true,reason})}}
   finally{if(previewUrl!==url)URL.revokeObjectURL(url)}
 }
-function acceptFiles(files){const list=Array.from(files||[]),file=list.find(isSupported);if(!file){message('noImage',{error:true,kept:!!current});return}loadFile(file,list.length>1)}
+function acceptFiles(files,options={}){const list=Array.from(files||[]),file=list.find(isSupported);if(!file){message('noImage',{error:true,kept:!!current});return}loadFile(file,list.length>1,options)}
 zone.addEventListener('click',()=>input.click());
 zone.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();input.click()}});
 input.addEventListener('change',()=>{if(input.files.length)acceptFiles(input.files);input.value=''});
@@ -522,13 +525,13 @@ document.addEventListener('paste',event=>{
   const files=Array.from(data.files||[]);
   for(const item of Array.from(data.items||[])){if(item.kind==='file'&&isSupported({type:item.type})){const file=item.getAsFile();if(file&&!files.length)files.push(file)}}
   event.preventDefault();
-  if(files.some(isSupported))acceptFiles(files);else message('noClipboard',{error:true,kept:!!current});
+  if(files.some(isSupported))acceptFiles(files,{source:'clipboard',receivedAt:new Date()});else message('noClipboard',{error:true,kept:!!current});
 });
 clear.addEventListener('click',()=>{reset();zone.focus()});
 save.addEventListener('click',()=>{
   if(!current)return;
   const url=URL.createObjectURL(current.blob),link=document.createElement('a');
-  link.href=url;link.download=pdfName(current.fileName);document.body.appendChild(link);link.click();link.remove();
+  link.href=url;link.download=current.downloadName;document.body.appendChild(link);link.click();link.remove();
   setTimeout(()=>URL.revokeObjectURL(url),60000);message('downloaded');
 });
 zone.focus({preventScroll:true});

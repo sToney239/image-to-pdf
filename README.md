@@ -21,6 +21,8 @@ Images are processed locally in the browser and never uploaded. Clipboard access
 
 Each PDF contains one page matching the image proportions. Transparent pixels become white. The rendered image is embedded losslessly as PNG without adding JPEG compression, so a PDF may be larger than the original JPEG. Images above 50 megapixels are rejected to limit memory use. Downloads use the browser's usual save location or save dialog.
 
+Selected or dropped files retain their original base name: `photo.jpg` becomes `photo.pdf`. Pasted images use `clipboard-YYYYMMDD-HHmmss.pdf`, using the user's local date and time when the image is pasted. That name stays the same when the same image is saved again or the interface language changes. Pasting a new image captures a new timestamp. The browser handles any remaining filename collisions.
+
 ## Source and rebuilding
 
 The published `index.html` works as-is. To edit the readable sources, update `src/template.html` or `src/app.js`, then run:
